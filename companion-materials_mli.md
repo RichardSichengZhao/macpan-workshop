@@ -69,7 +69,7 @@ Please read the
 participating in this workshop. The instructor will review this syllabus
 with participants before the sessions start.
 
-MLi: I would like a visualization of the roadmap. 
+==MLi: I would like a visualization of the roadmap.== 
 
 The syllabus provides a roadmap for the workshop, guiding participants
 through the exploration-parameterization-inference-stratification
@@ -89,9 +89,9 @@ documentation to address challenges, and provide constructive feedback
 for improving the tool.
 
 
-MLi: We need to straight out the end goal of the workshop, what do we want people to get out of it? For me, I would like people to bring in a model and they can walk out with a macpan2 implementation of the model they bring in. 
+==MLi: We need to straight out the end goal of the workshop, what do we want people to get out of it? For me, I would like people to bring in a model and they can walk out with a macpan2 implementation of the model they bring in.== 
 
-MLi: Given it is in-person, I would like a bit of interactive discussions. For example, we can do a brainstorming session of what people want based on their experience and challenges with their own models. We will list all of them and then SW can go through 1 at a time as a group and say, we can do this in macpan2 or we can't do it. This will give us an idea about future developments. 
+==MLi: Given it is in-person, I would like a bit of interactive discussions. For example, we can do a brainstorming session of what people want based on their experience and challenges with their own models. We will list all of them and then SW can go through 1 at a time as a group and say, we can do this in macpan2 or we can't do it. This will give us an idea about future developments.== 
 
 ### Philosophy
 
@@ -114,7 +114,7 @@ these concepts in special boxes.
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **User Feedback**<br>Our modelling concepts are hypotheses that I would like feedback on. What concepts seem helpful/useful and what concepts seem harmful/useless? |
 
-MLi: Do we have a good way to get feedbacks and not via email to SW?
+==MLi: Do we have a good way to get feedbacks and not via email to SW?==
 
 
 Ideally these concepts would lead to a perfectly intuitive tool. In
@@ -144,7 +144,7 @@ We will often use the [base R pipe
 operator](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/#pipes),
 `|>`, when it improves readability.
 
-MLi: We need to identify what is really necessary vs recommended. People can still use macpan2 without pipes right?
+==MLi: We need to identify what is really necessary vs recommended. People can still use macpan2 without pipes right?==
 
 ### Dependencies
 
@@ -202,7 +202,7 @@ sessionInfo() |> print()
 Participants will learn how to explore and modify models, and informally
 compare them with observed data.
 
-MLi: We will have to also prepare for folks without a model/data. If this is the case, I was like to promote IIDDA. We can say, if you want have data or model, here is a very cool database we compiled. If you are interested in reading more, go here for the preprint. 
+==MLi: We will have to also prepare for folks without a model/data. If this is the case, I was like to promote IIDDA. We can say, if you want have data or model, here is a very cool database we compiled. If you are interested in reading more, go here for the preprint.== 
 
 At the core of macpan2 are model specifications, which primarily define
 the flows between compartments and set default values for parameters.
@@ -308,7 +308,7 @@ There are three parts to this specification.
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | The `sir` model illustrates the two kinds of expressions that can be used to define model behaviour: (1) Generic math expressions (e.g., `S ~ N - I - R`) and (2) flows among compartments (e.g., `mp_per_capita_flows(from ...)`). In generic math expressions, the tilde, `~`, is used to denote assignment. For example, the expression, `S ~ N - I - R`, says that the result of `N - I - R` is assigned to the quantity, `S`. Any function listed [here](https://canmod.github.io/macpan2/reference/engine_functions) can be used on the right-hand-side of these expressions. Each flow expression corresponds to a single flow between compartments. The tilde-based math expressions and flow expressions can be mixed to provide a great deal of flexibility in model specifications. Throughout I will discuss the relative advantages and disadvantages of using one or the other. |
 
-MLi: I personally don't like this order. I would probably start with showing how to implement an SIR and then be like oh yeah, we have a bunch of templates where we already coded some of the commonly used models. It would be great to show the manual implementation matching up with the boilerplate. 
+==MLi: I personally don't like this order. I would probably start with showing how to implement an SIR and then be like oh yeah, we have a bunch of templates where we already coded some of the commonly used models. It would be great to show the manual implementation matching up with the boilerplate.==
 
 
 ### Simulating Dynamics
@@ -331,7 +331,11 @@ from it, so you develop this skill immediately.
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Simple, Consistent, and General Format for Simulation Output**<br>Simulations of `macpan2` models are always returned in the same format – there are no options. This inflexibility is deliberate. The simulation data format is simple and easily adapted to whatever data organizational preferences you might have. This choice also benefits us because it means we do not need to worry about reinventing data preparation tools (many of which already exist) and focus on epidemiological modelling functionality (of which fewer options exist). [This](https://canmod.github.io/macpan2/articles/quickstart#generating-simulations) article gives a brief but full description of the data format. |
 
-MLi: Page not found. Unless quickstart shows how to manually make an SIR, I am not comfortable with the current flow. I don't like the idea of right off the bat you use the template. Don't get me wrong, for an user that is probably the case, but for teaching, I would like a manual implementation first.  
+==MLi: Page not found. Unless quickstart shows how to manually make an SIR, I am not comfortable with the current flow. I don't like the idea of right off the bat you use the template. Don't get me wrong, for an user that is probably the case, but for teaching, I would like a manual implementation first.==
+
+==RZhao: It would be nice to show a implementation here instead of a quick start guide. I know there is detailed explanation later, but some short annotation to the first chunk of code would be appreciate:==
+- ==what did `mp_trajectory` do: convert data to long format for `ggplot`==
+- ==The `mutate` part is to rename variables for the figure==
 
 ### Relating Model Specifications to Box Diagrams
 
@@ -353,6 +357,14 @@ mp_print_during(sir)
     ## 2: mp_per_capita_flow(from = "I", to = "R", rate = "gamma", abs_rate = "recovery")
 
 ![](figures/sir-diagram-1.png)<!-- -->
+
+==RZhao: The `plot_flow_diagram` function seems not finished yet, but has been mentioned several times in the documents of example models. It would be very appealing to show how to plot this flow diagram from the `sir` directly. Maybe mentioning there is limitations to the function.==
+```r
+system.file("utils", "box-drawing.R", package = "macpan2") |> source()
+layout <- mp_layout_paths(sir)
+plot_flow_diagram(layout,show_flow_rates = TRUE)
+```
+
 
 | <img src="images/exercise.svg" width="120" />                                                                                                                                                                                                                |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
