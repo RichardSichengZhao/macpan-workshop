@@ -5,17 +5,11 @@ Author: [Steve Walker](https://github.com/stevencarlislewalker)
 
 Last Updated: 2025-01-10
 
-[![CC BY-NC-SA
-4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![CC BY-NC-SA4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-This is a (currently draft) set of companion materials for a workshop on
-using [`macpan2`](https://canmod.github.io/macpan2) for applied public
-health modelling.
+This is a (currently draft) set of companion materials for a workshop on using [`macpan2`](https://canmod.github.io/macpan2) for applied public health modelling.
 
-(Note: I highlight areas that cannot be finalized yet, with notes like
-this)
-
-<!-- omit from toc -->
+(Note: I highlight areas that cannot be finalized yet, with notes like this)
 
 ## Table of Contents
 
