@@ -310,6 +310,8 @@ There are three parts to this specification.
 
 ==MLi: I personally don't like this order. I would probably start with showing how to implement an SIR and then be like oh yeah, we have a bunch of templates where we already coded some of the commonly used models. It would be great to show the manual implementation matching up with the boilerplate.==
 
+==RZhao: Seconded. Also, I think show how to build the model from a flow diagram using MacPan is pretty appealing to me at first time.
+I also suggest showing the box diagram generate by MacPan here instead of after next section.==
 
 ### Simulating Dynamics
 
