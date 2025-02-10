@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "2e139fe7ed1f41a0",
+        "id": "00b93269c79b2358",
         "type": "tabs",
         "children": [
           {
-            "id": "0ed80e3abb5f8840",
+            "id": "c2db6678b8939034",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -207,11 +207,18 @@
       }
     ]
   },
-  "active": "0ed80e3abb5f8840",
+  "active": "c401521728fe5ab8",
   "lastOpenFiles": [
+    "macpan-workshop-library/si/tmb.R",
+    "macpan-workshop-library/si",
+    "macpan-workshop-library/seir/tmb.R",
+    "macpan-workshop-library/seir",
+    "macpan-workshop-library/seir.R",
+    "macpan-workshop-library/tmb.R",
+    "macpan-workshop-library",
+    "companion-materials_mli.md",
     "Workshop 1.r",
     "companion-materials.md",
-    "companion-materials_mli.md",
     "README.md",
     "syllabus.md"
   ]

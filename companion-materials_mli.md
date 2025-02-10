@@ -310,8 +310,7 @@ There are three parts to this specification.
 
 ==MLi: I personally don't like this order. I would probably start with showing how to implement an SIR and then be like oh yeah, we have a bunch of templates where we already coded some of the commonly used models. It would be great to show the manual implementation matching up with the boilerplate.==
 
-==RZhao: Seconded. Also, I think show how to build the model from a flow diagram using MacPan is pretty appealing to me at first time.
-I also suggest showing the box diagram generate by MacPan here instead of after next section.==
+==RZhao: Seconded. Also, I think show how to build the model from a flow diagram using MacPan is pretty appealing to me at first time. I also suggest showing the box diagram generate by MacPan here instead of after next section.==
 
 ### Simulating Dynamics
 
@@ -336,7 +335,7 @@ from it, so you develop this skill immediately.
 ==MLi: Page not found. Unless quickstart shows how to manually make an SIR, I am not comfortable with the current flow. I don't like the idea of right off the bat you use the template. Don't get me wrong, for an user that is probably the case, but for teaching, I would like a manual implementation first.==
 
 ==RZhao: It would be nice to show a implementation here instead of a quick start guide. I know there is detailed explanation later, but some short annotation to the first chunk of code would be appreciate:==
-- ==what did `mp_trajectory` do: convert data to long format for `ggplot`==
+- ==what did `mp_trajec0tory` do: convert data to long format for `ggplot`==
 - ==The `mutate` part is to rename variables for the figure==
 
 ### Relating Model Specifications to Box Diagrams
@@ -427,6 +426,8 @@ sir |> mp_expand() |> mp_print_during()
     ## 4: I ~ I + infection - recovery
     ## 5: R ~ R + recovery
 
+==RZhao: It could be better to explain what `mp_print_during` actually do.==
+
 This output illustrates that the (default) simulation framework is a
 discrete time system of difference equations. In the first two
 expressions in the expanded version the absolute flow rates are
@@ -445,8 +446,7 @@ $$
 \end{align}
 $$
 
-
-MLi: Expand text why one would want to use ODE. For example, people are used to it... bla bla bla
+==MLi: Expand text why one would want to use ODE. For example, people are used to it... bla bla bla==
 
 We can easily use the `sir` compartmental model object to simulate it as
 an ODE using the `mp_rk4()` function, which uses the [Runge Kutta 4 ODE
@@ -489,12 +489,9 @@ sir |> mp_rk4() |> mp_expand() |> mp_print_during()
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Mix and Match Compartmental Models with State Update Methods**<br>Difference equations and ODEs are the two most common [state update methods](https://canmod.github.io/macpan2/reference/state_updates) for simulating a compartmental model. The design of `macpan2` allows different state update methods to be mixed and matched with different compartmental model specifications. This flexible modularity is a key part of the power of `macpan2` – the model specification language is agnostic about the state update method. Therefore each compartmental model can be simulated in any number of ways. The full list of currently available state update methods is [here](https://canmod.github.io/macpan2/reference/state_updates). |
 
-Here is one more example of an SIR model expansion that uses the
-[Euler-multinomial
-distribution](https://kingaa.github.io/manuals/pomp/html/eulermultinom.html)
-to simulate a compartmental model with process error.
+Here is one more example of an SIR model expansion that uses the [Euler-multinomial distribution](https://kingaa.github.io/manuals/pomp/html/eulermultinom.html) to simulate a compartmental model with process error.
 
-MLi: Write a bit more text. Why do people want it and why is it good to include it. I know we are not teaching why people epi/modelling, but I feel like a few extra lines talking through some points can help instead the current version just saying "use this".  
+==MLi: Write a bit more text. Why do people want it and why is it good to include it. I know we are not teaching why people epi/modelling, but I feel like a few extra lines talking through some points can help instead the current version just saying "use this".== 
 
 ``` r
 sir |> mp_euler_multinomial() |> mp_expand() |> mp_print_during()
@@ -509,9 +506,7 @@ sir |> mp_euler_multinomial() |> mp_expand() |> mp_print_during()
     ## 4: I ~ I + infection - recovery
     ## 5: R ~ R + recovery
 
-Note that all [state update
-methods](https://canmod.github.io/macpan2/reference/state_updates)
-generate the same last three expressions for this `sir` model object.
+Note that all [state update methods](https://canmod.github.io/macpan2/reference/state_updates) generate the same last three expressions for this `sir` model object.
 
 ``` r
 S ~ S - infection
@@ -527,11 +522,52 @@ the absolute flow rates per time step.
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Embrace Difference Equations**<br>The original [McMasterPandemic](https://github.com/mac-theobio/McMasterPandemic) project was based entirely on discrete time models. Simulations from discrete time difference equations requires little math to implement and understand. This simplicity is nice in applied work where the barriers to real-world impact do not usually include mathematical novelty and elegance. Further, when modelling a real system it is natural to compare simulations with observed data, which are measured at discrete times anyways.<br><br>Difference equations are not without their drawbacks however. Many results in mathematical epidemiology come from ODEs and various stochastic processes, and so when using difference equations epidemiologists might be concerned that their intuition from ODEs will not hold. Difference equations can also be less stable (e.g., state variables going below zero) than ODEs, which can become a real problem when calibrating models using trajectory matching. Therefore we make it easy to check these concerns by using a [state update method](https://canmod.github.io/macpan2/reference/state_updates) like `mp_rk4()` (for a simple ODE solver) or `mp_euler_multinomial()` (for a simple process error model) to overcome these concerns whenever necessary.<br><br>When using these alternative state update methods keep in mind that they too can be thought of as difference equation model. Carefully inspect the last three lines of any of the expanded `sir` models, which constitute the same set of difference equations no matter what state update method is used. This similarity indicates that all state update methods boil down to discrete-time difference equations, but with different approaches to calculating the absolute flow rates (e.g., `infection` and `recovery`). These absolute rate variables describe the changes in the state variables (e.g., `S`, `I`, `R`) due to different processes over a single time-step, allowing for continuous change within a time-step. This means, for example, that the time-series of the `infection` variable will contain the incidence over each time-step. So, for example, if each time-step represents one week, the `infection` variable will contain weekly incidence values.<br><br>In summary, the choice of state update method will often not matter in applied work, but when it does the [state update methods](https://canmod.github.io/macpan2/reference/state_updates) make it simple to explore options. |
 
-MLi: I would go back and see if we can make a shorter version. We can keep this as it is, but I feel like there is an imbalance of efforts (which is not your fault), so the way to resolve this imbalance is to cut (pieces that are way too detailed) and not add (make other sectioned even bigger). 
+==MLi: I would go back and see if we can make a shorter version. We can keep this as it is, but I feel like there is an imbalance of efforts (which is not your fault), so the way to resolve this imbalance is to cut (pieces that are way too detailed) and not add (make other sectioned even bigger).== 
 
 | <img src="images/exercise.svg" width="120" />                                                                                                                                                                                                                                                                   |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Write out by hand the last four lines of an expanded SEIR model.<br><br>[Read](https://canmod.github.io/macpan2/articles/example_models#using-examples) the [SEIR model](https://github.com/canmod/macpan2/tree/main/inst/starter_models/seir) from the model library and test if you were correct. |
+
+	==RZhao: Since the exercise are asking learners to write down the difference equation, I think it would be better if we know how to construct our own SEIR model manually from equation/diagram .==
+
+```r
+seir = mp_tmb_model_spec(
+      before = S ~ N - I - E - R    # Initial state
+    , during = list(                # List is not used in SIR case
+        mp_per_capita_flow(
+          from     = "S"            # compartment from which individuals flow
+        , to       = "E"            # compartment to which individuals flow
+        , rate     = "beta * I / N" # expression giving per-capita flow rate
+        , abs_rate = "exposure"     # name of absolute flow rate = beta * I * S/N
+        )
+      , mp_per_capita_flow(
+          from     = "E"
+        , to       = "I"
+        , rate     = "alpha"
+        , abs_rate = "infection"
+      )
+      , mp_per_capita_flow(
+          from     = "I"
+        , to       = "R"
+        , rate     = "gamma"
+        , abs_rate = "recovery"
+      )
+    )
+  , default = list(  N = 100
+                   , I = 1
+                   , E = 0
+                   , R = 0
+                   , beta = 0.25
+                   , alpha = 0.5
+                   , gamma = 0.1
+                   )
+)
+layout <- mp_layout_paths(seir)
+plot_flow_diagram(layout,show_flow_rates = TRUE)
+
+seir |> mp_expand() |> mp_print_during()
+```
+
 
 TODO: Simulate dynamics with different approaches.
 
@@ -544,19 +580,26 @@ start, so let’s get started doing this.
 |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Follow the advice [here](https://canmod.github.io/macpan2/articles/example_models.html#modifying-examples) to create two copies of the [SIR](https://github.com/canmod/macpan2/tree/main/inst/starter_models/sir) model: one called SI and one called SEIR. Place both of these models in a directory on your computer called `macpan-workshop-library`. Or just do one model as time permits.<br><br>Simplify the model called SI so that it is an SI model (check your work [here](https://github.com/canmod/macpan2/tree/main/inst/starter_models/si)).<br><br>Add flows to the model called SEIR so that it becomes an SEIR model (check your work [here](https://github.com/canmod/macpan2/tree/main/inst/starter_models/seir)).<br><br>Simulate a time-series of incidence from one of these models and plot it. |
 
-MLi: Highlight this is basically what "off-the-shelf" model means. 
+==MLi: Highlight this is basically what "off-the-shelf" model means.==
+
+==RZhao: For this exercise, we might need more detailed explanations in [Modifying Examples](https://canmod.github.io/macpan2/articles/example_models.html#modifying-examples). Little confusing for how the directory works when I tried==
+- ==each directory can contain only one template model `tmb.r`, thus you need to create one distinguishable directory for each model you want to create.==
+- ==`mb_model_starter` would create a directory with template `tmb.r` based on specified first argument from existing macpan2 library. When `mb_model_starter` is called, the directory specified by the file path will be created if it does not exist, however, if the directory already exist, an error msg will be generated and the template will not be updated.==
+	- ==In the [document of `mp_model_starter`](https://canmod.github.io/macpan2/reference/mp_model_starter.html), it says the first argument can only be `sir`. However, other models in macpan2 library can be called and used as templates. Not Finished/Unfixed???==
+- ==the name of the template file `tmb.r` should not be changed, so the models could be called correctly by its directory==
 
 The previous exercise described one approach to modifying existing
 models, which involves copying a directory and editing the files in that
-directory. Another approach uses the [`mp_tmb_update()`,
-`mp_tmb_insert()`,
-`mp_tmb_delete()`](https://canmod.github.io/macpan2/reference/mp_tmb_insert)
+directory. Another approach uses the [`mp_tmb_update()`, `mp_tmb_insert()`, `mp_tmb_delete()`](https://canmod.github.io/macpan2/reference/mp_tmb_insert)
 functions, which take a loaded model specification object (like the
 `sir` object above) and returns a modified version of that object.
 
 | <img src="images/exercise.svg" width="120" />                                                                                                                                                                                                                                                                         |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Read this help page and be ready to discuss the differences between these functions: <https://canmod.github.io/macpan2/reference/mp_tmb_insert>.<br><br>Use these functions to repeat the previous exercise by modifying the `sir` object within an R session instead of editing a model definition file. |
+
+
+==RZhao: why not use `mp_tmb_model_spec` to define a model directly?==
 
 ### Compare Simulated and Observed Incidence
 
