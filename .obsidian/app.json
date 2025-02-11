@@ -2,5 +2,9 @@
   "livePreview": false,
   "readableLineLength": true,
   "strictLineBreaks": true,
-  "showLineNumber": true
+  "showLineNumber": true,
+  "showUnsupportedFiles": true,
+  "newFileLocation": "root",
+  "newFileFolderPath": "docs",
+  "attachmentFolderPath": "./docs"
 }

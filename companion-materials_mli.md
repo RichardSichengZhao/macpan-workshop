@@ -3,7 +3,7 @@ Workshop on `macpan2` – Companion Materials
 
 Author: [Steve Walker](https://github.com/stevencarlislewalker)
 
-Last Updated: 2025-01-10
+Last Updated: 2025-01-10f
 
 [![CC BY-NC-SA4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
@@ -599,7 +599,7 @@ functions, which take a loaded model specification object (like the
 | Read this help page and be ready to discuss the differences between these functions: <https://canmod.github.io/macpan2/reference/mp_tmb_insert>.<br><br>Use these functions to repeat the previous exercise by modifying the `sir` object within an R session instead of editing a model definition file. |
 
 
-==RZhao: why not use `mp_tmb_model_spec` to define a model directly?==
+==RZhao: Is there a reason why not use `mp_tmb_model_spec` to define a model directly?==
 
 ### Compare Simulated and Observed Incidence
 
