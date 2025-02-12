@@ -69,7 +69,9 @@ Please read the
 participating in this workshop. The instructor will review this syllabus
 with participants before the sessions start.
 
-==MLi: I would like a visualization of the roadmap.== 
+==MLi: I would like a visualization of the roadmap.==
+
+==RZhao: It would be nice to have a explicit list of pros and cons of `macpan` or what it can do and what it is good at comparing to other existing tools, and what it cannot do yet. This could provide a more clear motivation to learn and/or use `macpan`. It also helps the participants to prepare for their own model and questions to bring to the workshop.==
 
 The syllabus provides a roadmap for the workshop, guiding participants
 through the exploration-parameterization-inference-stratification
@@ -335,7 +337,7 @@ from it, so you develop this skill immediately.
 ==MLi: Page not found. Unless quickstart shows how to manually make an SIR, I am not comfortable with the current flow. I don't like the idea of right off the bat you use the template. Don't get me wrong, for an user that is probably the case, but for teaching, I would like a manual implementation first.==
 
 ==RZhao: It would be nice to show a implementation here instead of a quick start guide. I know there is detailed explanation later, but some short annotation to the first chunk of code would be appreciate:==
-- ==what did `mp_trajec0tory` do: convert data to long format for `ggplot`==
+- ==what did `mp_trajectory` do: convert data to long format for `ggplot`==
 - ==The `mutate` part is to rename variables for the figure==
 
 ### Relating Model Specifications to Box Diagrams
@@ -585,7 +587,7 @@ start, so let’s get started doing this.
 ==RZhao: For this exercise, we might need more detailed explanations in [Modifying Examples](https://canmod.github.io/macpan2/articles/example_models.html#modifying-examples). Little confusing for how the directory works when I tried==
 - ==each directory can contain only one template model `tmb.r`, thus you need to create one distinguishable directory for each model you want to create.==
 - ==`mb_model_starter` would create a directory with template `tmb.r` based on specified first argument from existing macpan2 library. When `mb_model_starter` is called, the directory specified by the file path will be created if it does not exist, however, if the directory already exist, an error msg will be generated and the template will not be updated.==
-	- ==In the [document of `mp_model_starter`](https://canmod.github.io/macpan2/reference/mp_model_starter.html), it says the first argument can only be `sir`. However, other models in macpan2 library can be called and used as templates. Not Finished/Unfixed???==
+	- ==In the [documentation of `mp_model_starter`](https://canmod.github.io/macpan2/reference/mp_model_starter.html), it says the first argument can only be `sir`. However, other models in macpan2 library can be called and used as templates. Not Finished/Unfixed???==
 - ==the name of the template file `tmb.r` should not be changed, so the models could be called correctly by its directory==
 
 The previous exercise described one approach to modifying existing
