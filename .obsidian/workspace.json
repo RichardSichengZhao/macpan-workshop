@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "00b93269c79b2358",
+        "id": "0ac9d713f241b953",
         "type": "tabs",
         "children": [
           {
-            "id": "c2db6678b8939034",
+            "id": "41e894703514f675",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -168,7 +168,46 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c2db6678b8939034",
+  "floating": {
+    "id": "fc82df9eaba624d8",
+    "type": "floating",
+    "children": [
+      {
+        "id": "e0a26bec4a243770",
+        "type": "window",
+        "children": [
+          {
+            "id": "fd47d58633766e41",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "ddefb0abf2937efa",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "companion-materials_mli.md",
+                    "mode": "preview",
+                    "source": true
+                  },
+                  "icon": "lucide-file",
+                  "title": "companion-materials_mli"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 1991,
+        "y": 128,
+        "width": 1024,
+        "height": 800,
+        "maximize": true,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "84ebff425254fd87",
   "lastOpenFiles": [
     "macpan-workshop-library/si/tmb.R",
     "macpan-workshop-library/si",

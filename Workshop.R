@@ -129,3 +129,116 @@ new_si <- mp_tmb_update(my_si
               , default = list (zeta = 1)
               )
 new_si |> mp_expand() |> mp_print_during()
+
+
+# Compare Simulated and Observed Incidence
+release = "https://github.com/canmod/macpan2/releases/download/macpan1.5_data"
+covid_on = (release
+            |> file.path("covid_on.RDS")
+            |> url() 
+            |> readRDS()
+)
+covid_on |> head() |> print()
+
+covid_on |> summary()
+
+reports = (covid_on
+           |> filter(var == "report")
+           ##|> filter(abs(value) < 10^4) ## do not believe numbers higher than 10^4
+)
+
+(reports
+  |> ggplot()
+  + geom_line(aes(date, value))
+  + theme_bw()
+)
+
+sir_covid = mp_tmb_insert(sir
+                          
+                          ## Modify the the part of the model that
+                          ## is executed once "during" each iteration
+                          ## of the simulation loop.
+                          , phase = "during"
+                          
+                          ## Insert the new expressions at the 
+                          ## end of each iteration.
+                          ## (Inf ~ infinity ~ end)
+                          , at = Inf
+                          
+                          ## Specify the model for under-reporting as
+                          ## a simple fraction of the number of new
+                          ## cases every time-step.
+                          , expressions = list(reports ~ report_prob * infection)
+                          
+                          ## Update defaults to something a little more 
+                          ## reasonable for early covid in Ontario.
+                          , default = list(
+                              gamma = 1/14      ## 2-week recovery
+                            , beta = 2.5/14     ## R0 = 2.5
+                            , report_prob = 0.1 ## 10% of cases get reported
+                            , N = 1.4e7         ## Ontario population  
+                            , I = 50            ## start with undetected infections
+                          )
+)
+
+sir_covid |> mp_expand() |> print()
+sir |> mp_expand() |> print()
+
+### simulating reports
+early_reports = filter(reports, date < as.Date("2020-07-01"))
+(early_reports
+  |> ggplot()
+  + geom_line(aes(date, value))
+  + theme_bw()
+)
+sim_early_reports = (sir_covid 
+                     |> mp_simulator(
+                       time_steps = nrow(early_reports)
+                       , outputs = "reports"
+                     )
+                     |> mp_trajectory()
+                     |> mutate(
+                       date = min(early_reports$date) + days(time)
+                     )
+)
+comparison_early_reports = bind_rows(
+  list(
+    simulated = sim_early_reports
+    , observed = early_reports
+  )
+  , .id = "source"
+)
+(comparison_early_reports
+  |> ggplot()
+  + geom_line(aes(date, value, colour = source))
+  
+  ## constrain y-axis to the range of the
+  ## observed data, otherwise the simulations
+  ## will make it impossible to see the data
+  + coord_cartesian(ylim = c(0, max(early_reports$value, na.rm = TRUE)))
+  + theme_bw() 
+  + theme(legend.position="bottom")
+)
+
+
+# delay in reporting
+si <- mp_tmb_library("starter_models","si", package = "macpan2")
+si_with_delays = (si
+                  |> mp_tmb_insert_reports(
+                    incidence_name = "infection"
+                    , mean_delay = 50
+                    , cv_delay = 0.25
+                    , report_prob = 1
+                    , reports_name = "reports"
+                  )
+)
+(si_with_delays
+  |> mp_simulator(
+    time_steps = 50L
+    , outputs = c("infection", "reports")
+  )
+  |> mp_trajectory()
+  |> ggplot()
+  + geom_line(aes(time, value, colour = matrix))
+  + theme_bw()
+)

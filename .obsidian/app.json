@@ -1,6 +1,6 @@
 {
   "livePreview": false,
-  "readableLineLength": true,
+  "readableLineLength": false,
   "strictLineBreaks": true,
   "showLineNumber": true,
   "showUnsupportedFiles": true,

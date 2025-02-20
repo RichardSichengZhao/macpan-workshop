@@ -497,7 +497,7 @@ Here is one more example of an SIR model expansion that uses the [Euler-multinom
 
 ``` r
 sir |> mp_euler_multinomial() |> mp_expand() |> mp_print_during()
-```
+``` 
 
     ## ---------------------
     ## At every iteration of the simulation loop (t = 1 to T):
@@ -605,6 +605,15 @@ functions, which take a loaded model specification object (like the
 
 ### Compare Simulated and Observed Incidence
 
+==RZhao: I know that in the examples discussed in this section are mainly focus on incidence, but at the structure level I think use data instead of incidence is better for the title of the section, so the participants would not limit what they learned just to incidence. Also works better if they use the workshop material as a guideline for their own.==
+
+==RZhao: Adding another layer of sections might be better:==
+- ==Compare Simulated and Observed Data==
+	- ==Incorporating reporting probability ==
+	- ==Reporting delays==
+	- ==etc.==
+
+
 Now we are getting to the interesting stuff in this first `Exploration`
 section of the `Exploration-Parameterization-Inference-Stratification`
 methodology: using data (and other empirical information) and
@@ -652,6 +661,8 @@ covid_on |> summary()
     ##                     Max.   :2024-04-16                      Max.   : 26834981  
     ##                                                             NA's   :1793
 
+==RZhao: The data is in long format, is their a specific reason to show the summary here? Maybe highlight some points that we should focus here. ==
+
 Hmmm … lots of suspicious things to investigate … but let’s stay focused
 on case reports, which I will compare with simulated incidence.
 
@@ -666,13 +677,14 @@ reports = (covid_on
     + theme_bw()
 )
 ```
+==RZhao: The comments in the code here is questionable, why $1e^4$. I know there are 2 wild data point in 2024, seems they might sum up all numbers in several days. Could be better if saying that we focus the data before some date.==
 
 ![](figures/exploratory-plot-reports-1.png)<!-- -->
 
 Just to start, let’s focus on a single wave so I do not need to worry
 about time-varying parameters and/or the causes of waves.
 
-MLi: Is this hinting you will continue this exact same example later? If not, change the text accordingly please.
+==MLi: Is this hinting you will continue this exact same example later? If not, change the text accordingly please.==
 
 ``` r
 early_reports = filter(reports, date < as.Date("2020-07-01"))
@@ -692,7 +704,7 @@ simulations and observed data. This will form the foundation for
 modifying the model to make it capture important features of the
 underlying processes.
 
-MLi: What does reasonable mean here? Expand the chain of thought. 
+==MLi: What does reasonable mean here? Expand the chain of thought.== 
 
 ``` r
 sir_covid = mp_tmb_insert(sir
@@ -724,6 +736,8 @@ sir_covid = mp_tmb_insert(sir
 )
 print(sir_covid)
 ```
+==RZhao: It would be better to keep using pipes when `print` for consistency here.==
+
 
     ## ---------------------
     ## Default values:
@@ -786,7 +800,7 @@ comparison_early_reports = bind_rows(
     + theme_bw() + theme(legend.position="bottom")
 )
 ```
-
+==RZhao: Might be better to comment some codes like `mutate`: match time in the simulated trajectory to the data. The participant might not familiar with the output data structure of MacPan.==
 ![](figures/early-covid-comparison-1.png)<!-- -->
 
 It took me a few iterations of model adjustments to make this plot,
@@ -794,7 +808,7 @@ which illustrates a reasonably good fit before the peak of the wave and
 quite poor fit after it. Still, the next two concepts argue that this is
 quite a bit of progress and sets us up nicely for next steps.
 
-MLi: Define "reasonably good fit". What makes you say that? (I am not saying you are wrong, I want you to say a bit more).
+==MLi: Define "reasonably good fit". What makes you say that? (I am not saying you are wrong, I want you to say a bit more).==
 
 | <img src="images/concept.svg" width="120" />                                                                                                                                                                                                                                                                                                                                                                 |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -819,7 +833,7 @@ series of reported cases that is expected by the model. Keep reading to
 find out specifically how this is done.
 
 
-MLi: Explain what convolutions are vs a shift in data or whatever people do to handle reporting delays.
+==MLi: Explain what convolutions are vs a shift in data or whatever people do to handle reporting delays.==
 
 ![](figures/convolution-series-1.png)<!-- -->
 
@@ -836,7 +850,7 @@ COVID-19 pandemic the McMaster group found that a Gamma distribution
 with mean delay of 11 days and coefficient of variation of 0.25 was a
 reasonable model.
 
-MLi: Gamma is ok, for an example, do we want to use Normal instead? If you use Gamma, do you want to explain it a little? (i.e. non-negative and etc). 
+==MLi: Gamma is ok, for an example, do we want to use Normal instead? If you use Gamma, do you want to explain it a little? (i.e. non-negative and etc).== 
 
 The following figure illustrates how a single expected case report is
 computed, in this case at time 26. The Gamma distribution of delay times
@@ -848,6 +862,9 @@ delay distribution. This makes sense because we would expect most of our
 reports now to come from the highest probability time in the past.
 
 ![](figures/explain-convolution-1.png)<!-- -->
+
+==RZhao: this is little confusing at first glance. Little more explanation about gamma distribution might be helpful.==
+
 
 In `macpan2` we typically have a model that doesn’t account for delayed
 reporting and we want to update it to do so before fitting to data. One
@@ -876,6 +893,8 @@ si_with_delays = (si
 ```
 
 ![](figures/sir-with-delays-1.png)<!-- -->
+
+==`si` not defined. Using SI model from library does not reproduce the same figure==
 
 Notice how the `11`-day reporting delay specific using the `mean_delay`
 argument of the `mp_tmb_insert_reports` function has produced a
@@ -939,6 +958,10 @@ relative likelihood that different symptom statuses will be reported.
 This additional component is related to the [reporting
 delay](#reporting-delays) functionality.
 
+==RZhao: I think if we are going to discuss this it might take a longer time and need further explanation. It does not seems to be highly related to `macpan` either.==
+
+==RZhao: I feel it is weird. Here seems to be a sudden jump in the learning flow: Are we still discussing comparing models with data here? The focus sees change to modification of the model suddenly. It might be better to have some general discussion and example about modification, especially with the branching in flows.==
+
 ### Seroprevalence
 
 It is often the case that [serological data can be used to estimate the
@@ -953,7 +976,7 @@ with different compartments or adding a variable to the model that
 produces a transformation of the variables tracking immune states that
 is comparable with the raw seroprevalence data.
 
-MLi: Is shiver doing R/N or (N-S)/N for seroprevalence? 
+==MLi: Is shiver doing R/N or (N-S)/N for seroprevalence? ==
 
 
 | <img src="images/concept.svg" width="120" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -962,7 +985,7 @@ MLi: Is shiver doing R/N or (N-S)/N for seroprevalence?
 
 ### Vaccination
 
-MLi: Can you do a better transition instead of jumping right in? A short paragraph saying, oh, you want to do vaccination, you will need x,y,z).
+==MLi: Can you do a better transition instead of jumping right in? A short paragraph saying, oh, you want to do vaccination, you will need x,y,z).==
 
 If you happen to know the vaccination schedule (e.g., number of doses
 administered per time-step for each time-step in the simulation), one
