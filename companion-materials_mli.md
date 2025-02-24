@@ -894,7 +894,7 @@ si_with_delays = (si
 
 ![](figures/sir-with-delays-1.png)<!-- -->
 
-==`si` not defined. Using SI model from library does not reproduce the same figure==
+==RZhao: `si` not defined. Using SI model from library does not reproduce the same figure==
 
 Notice how the `11`-day reporting delay specific using the `mean_delay`
 argument of the `mp_tmb_insert_reports` function has produced a
@@ -958,9 +958,9 @@ relative likelihood that different symptom statuses will be reported.
 This additional component is related to the [reporting
 delay](#reporting-delays) functionality.
 
-==RZhao: I think if we are going to discuss this it might take a longer time and need further explanation. It does not seems to be highly related to `macpan` either.==
+==RZhao: I think if we are going to discuss flow of data, it might take a longer time and need further explanation. It does not seems to be highly related to `macpan` either.==
 
-==RZhao: I feel it is weird. Here seems to be a sudden jump in the learning flow: Are we still discussing comparing models with data here? The focus sees change to modification of the model suddenly. It might be better to have some general discussion and example about modification, especially with the branching in flows.==
+==RZhao: I feel it is weird. Here seems to be a sudden jump in the learning flow: Are we still discussing comparing models with data here? The focus sees change to modification of the model suddenly. It might be better to have some general discussion and a detailed example about modification, especially with the branching in flows.==
 
 ### Seroprevalence
 
@@ -976,7 +976,7 @@ with different compartments or adding a variable to the model that
 produces a transformation of the variables tracking immune states that
 is comparable with the raw seroprevalence data.
 
-==MLi: Is shiver doing R/N or (N-S)/N for seroprevalence? ==
+==MLi: Is shiver doing R/N or (N-S)/N for seroprevalence?==
 
 
 | <img src="images/concept.svg" width="120" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -995,7 +995,9 @@ that moves a known time-dependent number of individuals from a
 susceptible compartment to a protected compartment. An even simpler
 variation is just to include a constant number of doses per day, but
 this approach can be too simplistic especially when investigating
-questions of vaccine efficiacy.
+questions of vaccine efficacy.
+
+==RZhao: Typo efficiacy -> efficacy here. Also, a model diagram or a math expression might improve the learning experience here.==
 
 One complexity with this approach is that it can reduce the number of
 susceptible individuals below zero, if the user is not careful. This can
@@ -1041,6 +1043,10 @@ constant, with no birth or death.
 |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | The [sir_demog](https://github.com/canmod/macpan2/tree/main/inst/starter_models/sir_demog) model includes birth and death. You can use this example to add vital dynamics to another model. Neither birth nor death can use `mp_per_capita_flow()`, but instead `mp_per_capita_inflow()` and `mp_per_capita_outflow()` (see [here](https://canmod.github.io/macpan2/reference/mp_per_capita_flow) for examples and details). |
 
+==RZhao: Again, a model diagram or a math expression might improve the learning experience here.==
+
+==RZhao: Personally, I prefer to emphasize the functionality of `macpan` instead of start with different models, especially when learning new coding tools for general purpose. E.g. adding directed inflows/outflows by `mp_per_capita_inflow`/`mp_per_capita_outflow` first then use wastewater and vital dynamic model as an example. The users might not being familiar enough with models to navigate the functionality they need, but they are more clear to what they need for the model they are currently dealing with.==
+
 ### Importation and Stochasticity
 
 In many cases large jurisdictions can be considered closed and
@@ -1050,6 +1056,9 @@ however are more strongly impacted by stochasticity.
 | <img src="images/tip.svg" width="120" />                                                                                                                              |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | The [awareness](https://github.com/canmod/macpan2/tree/main/inst/starter_models/awareness) model in the library illustrates how `macpan2` can be used in these cases. |
+
+
+
 
 ## Parameterization
 
@@ -1084,10 +1093,11 @@ for the parameters that we would like to estimate through calibration.
 
 ### Optimized Calibration
 
-We have covered a lot of gound above, but it has all paved the way
+We have covered a lot of ground above, but it has all paved the way
 towards the topic of formally calibrating a model using data. Before
 getting to this point we needed to do the following.
 
+==RZhao: Typo: gound -> ground==
 -   [Find a model specification to start with](#starter-model-library).
 -   [Be able to simulate from this model](#simulating-dynamics)
 -   [Be able to modify this
@@ -1103,12 +1113,18 @@ getting to this point we needed to do the following.
 -   [Express prior uncertainty about model
     parameters](#express-uncertainty-in-model-parameters)
 
+==RZhao: It might be better to show these structured list at the beginning of previous section==
+
 Now that we have this out of the way we can create a model
 [calibrator](https://canmod.github.io/macpan2/reference/mp_tmb_calibrator)
-object that combines (1) a model specification, (2) a dataset that can
-be compared with simulations from this model, and (3) a list of
-distributional assumptions about model parameters that we would like to
-estimate. Such a calibrator can be used to fit these parameters to data,
+object that combines 
+- (1) a model specification, 
+- (2) a dataset that can
+be compared with simulations from this model, and 
+- (3) a list of distributional assumptions about model parameters that we would like to
+estimate. 
+
+Such a calibrator can be used to fit these parameters to data,
 and then simulate and forecast observable variables using this
 calibrated model. These calibrators can also be used to generate
 confidence intervals for these simulations and forecasts using
@@ -1117,6 +1133,8 @@ confidence intervals for these simulations and forecasts using
 | <img src="images/tip.svg" width="120" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | This [article](https://canmod.github.io/macpan2/articles/calibration) steps through the process of calibrating a compartmental model specification, using the sanity check of fitting a model to simulations generated from the same model. [The sequel to this article](https://canmod.github.io/macpan2/articles/real_data) illustrates these techniques using real scarlet fever data from the [International Infectious Disease Data Archive](https://github.com/canmod/iidda/blob/main/README.md). |
+
+==RZhao: An illustration with details for this topic might really help the learning experience.==
 
 ### MAP Estimation
 
@@ -1150,7 +1168,7 @@ method](https://en.wikipedia.org/wiki/Delta_method) that is implemented
 in [TMB](https://github.com/kaskr/adcomp), which is described
 [here](https://kaskr.github.io/adcomp/_book/Appendix.html#theory-underlying-sdreport).
 
-MLi: Will need some tips when you hit optimization problem and NaNs. What do you do? Can we make a simple MRE?
+==MLi: Will need some tips when you hit optimization problem and NaNs. What do you do? Can we make a simple MRE?==
 
 | <img src="images/tip.svg" width="120" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
