@@ -677,7 +677,7 @@ reports = (covid_on
     + theme_bw()
 )
 ```
-==RZhao: The comments in the code here is questionable, why $1e^4$. I know there are 2 wild data point in 2024, seems they might sum up all numbers in several days. Could be better if saying that we focus the data before some date.==
+==RZhao: The comments in the code here is questionable, why $1e^4$. I know there are 2 wild data points in 2024, seems they might sum up all numbers in several days. Could be better if saying that we focus the data before some date.==
 
 ![](figures/exploratory-plot-reports-1.png)<!-- -->
 
